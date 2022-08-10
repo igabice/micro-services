@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: "create-bets-schema.sql"
+      relativeToChangelogFile: true
+
