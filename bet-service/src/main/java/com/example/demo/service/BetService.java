@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.*;
-import com.example.demo.rest.request.BetItem;
-import com.example.demo.rest.request.NewBetSlipRequest;
+import com.example.demo.rest.response.OperationResponse;
 
 import java.util.List;
 
 public interface BetService {
 
-    BetSlip createBetSlip(BetSlipData betSlipData, List<BetItem> betItems);
+    BetSlip createBetSlip(BetSlipData betSlipData);
 
     BetSlip getBetSlip(Long id);
 
@@ -16,11 +15,11 @@ public interface BetService {
 
     BetData createBet(BetData bet);
 
-    BetData settleSingleBet(Long betId, String betPositionType);
+    OperationResponse settleSingleBet(Long betId, String betPositionType);
 
-    Integer settlePendingBets(String betPositionType);
+//    Integer settlePendingBets(String betPositionType);
 
     List<BetSlip> getBetSlipsByStatus(String betStatusType);
 
-
+    List<BetData> findBetsByStatus(String BetStatus);
 }
