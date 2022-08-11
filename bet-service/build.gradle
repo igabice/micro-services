@@ -49,6 +49,7 @@ dependencies {
 
 
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.4") //3.0.0
+	implementation("org.mockito:mockito-core:test") //3.0.0
 //	implementation("io.springfox:springfox-swagger-ui:3.0.0") //3.0.0
 }
 
