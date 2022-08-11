@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import lombok.NonNull;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,10 +13,14 @@ public class BetData {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    @NonNull
     private String name;
     private String status = "pending";
+    @NonNull
     private double homeOdd;
+    @NonNull
     private double awayOdd;
+    @NonNull
     private double drawOdd;
     private String outcome;
 

@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import lombok.NonNull;
+
 import javax.persistence.*;
 
 import java.util.Date;
@@ -12,10 +14,13 @@ public class BetSlip {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    @NonNull
     private Long accountId;
     private String status  = "pending";
     private String result  = "pending";
+    @NonNull
     private double totalOdd;
+    @NonNull
     private double stake;
     private String createdAt;
 
