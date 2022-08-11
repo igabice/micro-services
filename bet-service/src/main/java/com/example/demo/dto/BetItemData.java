@@ -1,13 +1,16 @@
 package com.example.demo.dto;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Table(name = "bet_item")
 public class BetItemData {
+
+    public BetItemData(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,7 +18,7 @@ public class BetItemData {
     private Long betId;
     private Long betSlipId;
     private String position;
-    private String status;
+    private String status  = "pending";
 
     public BetItemData(Long betId, Long betSlipId, String position) {
         this.betId = betId;

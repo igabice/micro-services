@@ -5,28 +5,35 @@ import com.example.demo.repository.BetItemRepository;
 import com.example.demo.repository.BetRepository;
 import com.example.demo.repository.BetSlipRepository;
 import com.example.demo.rest.request.BetItem;
+import com.example.demo.rest.response.OperationResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class BetDefaultService implements BetService{
 
+    @Autowired
     BetSlipRepository betSlipRepository;
+    @Autowired
     BetRepository betRepository;
+    @Autowired
     BetItemRepository betItemRepository;
 
     @Override
-    public BetSlip createBetSlip(BetSlipData betSlipData, List<BetItem> betItems) {
-        List<BetItemData> betItemDataList = Collections.<BetItemData>emptyList();
+    public BetSlip createBetSlip(BetSlipData betSlipData) {
+        List<BetItemData> betItemDataList = new ArrayList<BetItemData>();
 
         double totalOdds = 0.0;
-        for (BetItem item: betItems) {
+        for (BetItem item: betSlipData.betItems()) {
             totalOdds += item.getOdd();
         }
 
         BetSlip betSlip = betSlipRepository.save(new BetSlip(betSlipData.accountId(), betSlipData.stake(), totalOdds));
 
-        for (BetItem item: betItems) {
+        for (BetItem item: betSlipData.betItems()) {
             betItemDataList.add( new BetItemData(item.getBetId(), betSlip.getId(), item.getPosition()));
         }
         betItemRepository.saveAll(betItemDataList);
@@ -50,19 +57,24 @@ public class BetDefaultService implements BetService{
     }
 
     @Override
-    public BetData settleSingleBet(Long betId, String result) {
-        BetData bet = betRepository.getReferenceById(betId);
-        bet.setOutcome(result);
-        return betRepository.save(bet);
+    public OperationResponse settleSingleBet(Long betId, String result) {
+
+        betRepository.settleSingleBetById(result, betId);
+        return new OperationResponse(betId, "UPDATE_SUCCESSFUL");
     }
 
-    @Override
-    public Integer settlePendingBets(String betPositionType) {
-        return betRepository.updateAllPendingBets(betPositionType);
-    }
+//    @Override
+//    public Integer settlePendingBets(String betPositionType) {
+//        return betRepository.updateAllPendingBets(betPositionType);
+//    }
 
     @Override
     public List<BetSlip> getBetSlipsByStatus(String betStatusType) {
         return betSlipRepository.findByStatus(betStatusType);
+    }
+
+    @Override
+    public List<BetData> findBetsByStatus(String betStatus) {
+        return betRepository.findByStatusContaining(betStatus);
     }
 }

@@ -1,22 +1,20 @@
 package com.example.demo.dto;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 
 
 @Entity
+@Table(name = "betslip")
 public class BetSlip {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private Long accountId;
-    private String status;
-    private String result;
+    private String status  = "pending";
+    private String result  = "pending";
     private double totalOdd;
     private double stake;
     private String createdAt;
