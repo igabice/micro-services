@@ -10,6 +10,8 @@ import javax.persistence.Id;
 @Table(name = "bet_item")
 public class BetItemData {
 
+    public BetItemData(){}
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

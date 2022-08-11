@@ -75,6 +75,6 @@ public class BetDefaultService implements BetService{
 
     @Override
     public List<BetData> findBetsByStatus(String betStatus) {
-        return betRepository.findByStatus(betStatus);
+        return betRepository.findByStatusContaining(betStatus);
     }
 }

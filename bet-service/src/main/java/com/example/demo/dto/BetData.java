@@ -6,6 +6,8 @@ import javax.persistence.*;
 @Table(name = "bet")
 public class BetData {
 
+    public BetData(){}
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;

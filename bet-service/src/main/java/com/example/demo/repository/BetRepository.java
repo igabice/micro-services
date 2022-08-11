@@ -25,5 +25,5 @@ public interface BetRepository extends JpaRepository<BetData, Long> {
     @Query("update BetData b set b.outcome = ?1 where b.id = ?2")
     void settleSingleBetById(String result, Long id);
 
-    List<BetData> findByStatus(String status);
+    List<BetData> findByStatusContaining(String status);
 }
