@@ -30,9 +30,8 @@ dependencies {
 	testCompileOnly("org.projectlombok:lombok")
 	testAnnotationProcessor("org.projectlombok:lombok")
 
-//	implementation 'io.springfox:springfox-swagger2:2.9.2'
-//	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-//	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -49,7 +48,6 @@ dependencies {
 
 
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.4") //3.0.0
-//	implementation("io.springfox:springfox-swagger-ui:3.0.0") //3.0.0
 }
 
 dependencyManagement {

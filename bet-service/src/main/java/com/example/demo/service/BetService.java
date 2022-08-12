@@ -2,9 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.dto.*;
 import com.example.demo.rest.response.OperationResponse;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface BetService {
 
     BetSlip createBetSlip(BetSlipData betSlipData);
@@ -17,9 +20,9 @@ public interface BetService {
 
     OperationResponse settleSingleBet(Long betId, String betPositionType);
 
-//    Integer settlePendingBets(String betPositionType);
-
     List<BetSlip> getBetSlipsByStatus(String betStatusType);
 
     List<BetData> findBetsByStatus(String BetStatus);
+
+    OperationResponse settlePendingBets(String result, String status);
 }
