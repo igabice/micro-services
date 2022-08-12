@@ -25,6 +25,7 @@ public class BetController {
 
     @Autowired
     BetDefaultService service;
+
     public static Logger logger= Logger.getLogger("global");
 
     @PostMapping("/all")
@@ -89,6 +90,12 @@ public class BetController {
         }
         return service.settleSingleBet(request.getBetId(), request.getResult());
     }
+    @PostMapping("/settle-pending-bets")
+    public OperationResponse settlePendingBets(@RequestBody SettlePendingBetsRequest request) {
+        logger.info(request.toString());
+        return service.settlePendingBets(request.getStatus(), request.getResult());
+    }
+
 
 
 

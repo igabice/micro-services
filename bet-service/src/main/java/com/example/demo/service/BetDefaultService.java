@@ -62,11 +62,11 @@ public class BetDefaultService implements BetService{
         betRepository.settleSingleBetById(result, betId);
         return new OperationResponse(betId, "UPDATE_SUCCESSFUL");
     }
-
-//    @Override
-//    public Integer settlePendingBets(String betPositionType) {
-//        return betRepository.updateAllPendingBets(betPositionType);
-//    }
+    @Override
+    public OperationResponse settlePendingBets(String result, String status) {
+        betRepository.settlePendingBets(result, status);
+        return new OperationResponse(1L, "UPDATE_SUCCESSFUL");
+    }
 
     @Override
     public List<BetSlip> getBetSlipsByStatus(String betStatusType) {
