@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import lombok.NonNull;
+
 import javax.persistence.*;
 
 import javax.persistence.GeneratedValue;
@@ -15,8 +17,11 @@ public class BetItemData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NonNull
     private Long betId;
+    @NonNull
     private Long betSlipId;
+    @NonNull
     private String position;
     private String status  = "pending";
 
