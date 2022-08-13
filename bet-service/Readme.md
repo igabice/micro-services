@@ -1,3 +1,6 @@
+### build Bet service
+ - cd bet-service
+ - ./gradlew clean build
 ### Test
  - Use the command to run test:
 
