@@ -10,6 +10,9 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+targetCompatibility = '17'
+def dockerOwner = 'igabice'
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -47,6 +50,7 @@ dependencies {
 	testImplementation 'org.testcontainers:mysql'
 
 
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus:1.9.0'
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.4") //3.0.0
 
 }

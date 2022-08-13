@@ -1,0 +1,53 @@
+
+
+version: "3"
+services:
+  bet:
+    #    image: bet-service
+    build: ./bet-service
+    ports:
+      - 8090:8080
+    networks:
+      - bet-mysql
+#    networks:
+#      - bet-mysql
+#      - bet-wallet
+#      - wallet-mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/bets?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - spring.liquibase.url=jdbc:mysql://mysqldb:3306/bets
+      - spring.liquibase.user=root
+      - spring.liquibase.password=root
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8
+    networks:
+      - bet-mysql
+#      - bet-mysql
+#      - wallet-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_USER=root
+      - MYSQL_DATABASE=bets
+    ports:
+      - 3307:3306
+    volumes:
+      - dbdata:/var/lib/mysql
+
+#Docker Networks
+networks:
+  bet-mysql:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
+#networks:
+#  bet-mysql:
+#  wallet-mysql:
+#  bet-wallet:
