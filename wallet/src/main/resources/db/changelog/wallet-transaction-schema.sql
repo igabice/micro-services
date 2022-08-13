@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 -- changeset israel:setup-wallet-and-transactions-tables
 
-create table wallet (
+create table IF NOT EXISTS wallet (
  id int(11) NOT NULL AUTO_INCREMENT,
  account_id INT(11) NOT NULL,
  balance FLOAT(24),
@@ -9,7 +9,7 @@ create table wallet (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=543 DEFAULT CHARSET=utf8;
 
-CREATE TABLE transaction(
+CREATE TABLE IF NOT EXISTS transaction(
    id int(11) NOT NULL AUTO_INCREMENT,
    reference VARCHAR(50),
    account_id INT(11) NOT NULL,
