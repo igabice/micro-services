@@ -1,0 +1,68 @@
+plugins {
+	id 'org.springframework.boot' version "${spring_boot_gradle_plugin_version}"
+	id 'com.google.protobuf' version "${protobuf_gradle_version}"
+	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id "org.springdoc.openapi-gradle-plugin" version "1.4.0"
+	id 'java'
+}
+
+
+allprojects {
+	repositories {
+		mavenLocal()
+	}
+}
+
+
+subprojects {
+	apply plugin: 'idea'
+	apply plugin: 'java'
+	apply plugin: 'io.spring.dependency-management'
+
+	sourceCompatibility = "17"
+	targetCompatibility = "17"
+	group = 'com.example.demo'
+	version = "${version}"
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencyManagement {
+		imports {
+			mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+			mavenBom("org.junit:junit-bom:${junit_bom_version}")
+			mavenBom("org.testcontainers:testcontainers-bom:${test_containers_version}")
+			mavenBom("io.grpc:grpc-bom:${grpcBomVersion}")
+
+		}
+	}
+
+	dependencies {
+		compileOnly("org.projectlombok:lombok")
+		annotationProcessor("org.projectlombok:lombok")
+		testCompileOnly("org.projectlombok:lombok")
+		testAnnotationProcessor("org.projectlombok:lombok")
+
+
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+		implementation 'org.liquibase:liquibase-core'
+		implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.testcontainers:junit-jupiter'
+		testImplementation 'org.testcontainers:mysql'
+
+	}
+	test {
+		useJUnitPlatform()
+	}
+	bootJar {
+		enabled = false
+	}
+}
+

@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: "empty-changeset.sql"
+      relativeToChangelogFile: true
+
