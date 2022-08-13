@@ -1,0 +1,284 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /api/bet:
+    post:
+      tags:
+      - bet-controller
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewBetRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewBetResponse'
+  /api/bet/slip:
+    post:
+      tags:
+      - bet-controller
+      operationId: createBetSlip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewBetSlipRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BetSlipResponse'
+  /api/bet/slip/by/status:
+    post:
+      tags:
+      - bet-controller
+      operationId: allBetSlips
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BetSlipByStatusRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BetSlip'
+  /api/bet/settle-single-bet:
+    post:
+      tags:
+      - bet-controller
+      operationId: settleSingleBet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettleSingleBetRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+  /api/bet/settle-pending-bets:
+    post:
+      tags:
+      - bet-controller
+      operationId: settlePendingBets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettlePendingBetsRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+  /api/bet/all:
+    post:
+      tags:
+      - bet-controller
+      operationId: allBet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BetSlipByStatusRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bet'
+  /api/bet/slip/{id}:
+    get:
+      tags:
+      - bet-controller
+      operationId: getBetSlip
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BetSlipResponse'
+  /api/bet/slip/account/{accountId}:
+    get:
+      tags:
+      - bet-controller
+      operationId: allBetSlips_1
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BetSlip'
+components:
+  schemas:
+    NewBetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        homeOdd:
+          type: number
+          format: double
+        awayOdd:
+          type: number
+          format: double
+        drawOdd:
+          type: number
+          format: double
+    Bet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        status:
+          type: string
+        homeOdd:
+          type: number
+          format: double
+        awayOdd:
+          type: number
+          format: double
+        drawOdd:
+          type: number
+          format: double
+        outcome:
+          type: string
+    NewBetResponse:
+      type: object
+      properties:
+        bet:
+          $ref: '#/components/schemas/Bet'
+        message:
+          type: string
+    BetItem:
+      type: object
+      properties:
+        position:
+          type: string
+        betId:
+          type: integer
+          format: int64
+        odd:
+          type: number
+          format: double
+    NewBetSlipRequest:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int64
+        stake:
+          type: number
+          format: double
+        betItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/BetItem'
+    BetSlip:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        accountId:
+          type: integer
+          format: int64
+        status:
+          type: string
+        result:
+          type: string
+        totalOdd:
+          type: number
+          format: double
+        stake:
+          type: number
+          format: double
+        createdAt:
+          type: string
+    BetSlipResponse:
+      type: object
+      properties:
+        betSlip:
+          $ref: '#/components/schemas/BetSlip'
+        message:
+          type: string
+    BetSlipByStatusRequest:
+      type: object
+      properties:
+        status:
+          type: string
+    SettleSingleBetRequest:
+      type: object
+      properties:
+        result:
+          type: string
+        betId:
+          type: integer
+          format: int64
+    OperationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        message:
+          type: string
+    SettlePendingBetsRequest:
+      type: object
+      properties:
+        status:
+          type: string
+        result:
+          type: string
