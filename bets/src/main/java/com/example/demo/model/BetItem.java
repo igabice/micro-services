@@ -15,7 +15,7 @@ public class BetItem {
     public BetItem(){}
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NonNull
     private Long betId;

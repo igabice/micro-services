@@ -13,7 +13,7 @@ public class Transaction {
     public Transaction(){}
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @NonNull
     private Long accountId;
