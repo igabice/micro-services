@@ -61,7 +61,7 @@ public class WalletController {
     @GetMapping("balance/{account}")
     public BalanceResponse balance(@PathVariable("account") Long account) {
         final Balance balance = service.balance(account);
-        return new BalanceResponse(balance.accountId(), balance.amount(), "SUCCESS");
+        return new BalanceResponse(balance.accountId(), balance.amount(), "BALANCE_FOUND");
     }
 
     @GetMapping("operations/{account}")

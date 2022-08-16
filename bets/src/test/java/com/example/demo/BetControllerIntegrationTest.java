@@ -4,21 +4,28 @@ import com.example.demo.model.Bet;
 
 import com.example.demo.dto.BetSlipData;
 import com.example.demo.repository.BetRepository;
+import com.example.demo.rest.response.BalanceResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -32,12 +39,16 @@ import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -63,6 +74,9 @@ class BetControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private MockRestServiceServer mockRestServiceServer;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -98,6 +112,12 @@ class BetControllerIntegrationTest {
     @SneakyThrows
     void shouldCreateBetSlip() throws Exception {
 
+        final var balanceJson = new ClassPathResource("balance.json");
+
+        mockRestServiceServer
+            .expect(requestTo("http://wallet:8081/balance/" + 1L))
+            .andRespond(withSuccess(balanceJson, MediaType.APPLICATION_JSON));
+
         BetSlipData betSlip = new BetSlipData(1L, 100, createBetItems());
 
          mockMvc.perform(post("/api/bet/slip").contentType(MediaType.APPLICATION_JSON)
@@ -112,6 +132,8 @@ class BetControllerIntegrationTest {
                  .andExpect( jsonPath("$.betSlip.totalOdd").value(4.5))
                  .andExpect( jsonPath("$.betSlip.stake").value(betSlip.stake()));
     }
+
+
 
 
 
