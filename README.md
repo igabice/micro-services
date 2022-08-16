@@ -17,8 +17,8 @@
    http://localhost:63343/demo/bets/build/reports/tests/test/index.html
 
    
-  ### Docker Compose
-  a docker-compose file is located at the root directory. 
+### Docker Compose
+ - a docker-compose file is located at the root directory. 
     ### To start all services run
     - docker-compose up
     - wallet service can be accessed on: http://localhost:8091
