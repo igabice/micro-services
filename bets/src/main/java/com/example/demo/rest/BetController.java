@@ -1,19 +1,23 @@
 package com.example.demo.rest;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
 import com.example.demo.model.Bet;
 import com.example.demo.model.BetSlip;
+import com.example.demo.client.WalletClient;
 import com.example.demo.dto.BetSlipData;
 import com.example.demo.exception.InvalidRequestException;
 import com.example.demo.rest.request.*;
+import com.example.demo.rest.response.BalanceResponse;
 import com.example.demo.rest.response.BetSlipResponse;
 import com.example.demo.rest.response.NewBetResponse;
 import com.example.demo.rest.response.OperationResponse;
 import com.example.demo.service.BetDefaultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +28,9 @@ public class BetController {
 
     @Autowired
     BetDefaultService service;
+
+    @Autowired
+     WalletClient walletClient;
 
     public static Logger logger= Logger.getLogger("global");
 
@@ -46,30 +53,34 @@ public class BetController {
     }
 
     @PostMapping("/slip")
-    public BetSlipResponse createBetSlip(@RequestBody NewBetSlipRequest request) {
+    public BetSlipResponse createBetSlip(@RequestBody NewBetSlipRequest request) throws RestClientException, IOException {
         if (request == null || request.getStake() < 1) {
-            throw new InvalidRequestException("INVALID_REQUEST! Stake amount lesser than allowed (1)");
+            return new BetSlipResponse(1L, "INVALID_STAKE");
         }
         if (request.getBetItems().isEmpty()) {
-            throw new InvalidRequestException("INVALID_REQUEST! Please select a bet");
+            return new BetSlipResponse(1L, "INVALID_BET");
+        }
+        BalanceResponse balance = walletClient.getBalance(request.getAccountId());
+        if(balance.amount() < request.getStake()){
+            return new BetSlipResponse(1L, "BET_PLACED");
         }
         BetSlip betSlip = service.createBetSlip(new BetSlipData(request.getAccountId(), request.getStake(), request.getBetItems()));
-        return new BetSlipResponse(betSlip, "Created Successfully");
+        return new BetSlipResponse(betSlip.getId(), "BET_PLACED");
     }
 
     @GetMapping("/slip/{id}")
     public BetSlipResponse getBetSlip(@PathVariable("id") Long id) {
         if (id == null) {
-            throw new InvalidRequestException("INVALID_REQUEST! Missing slip id");
+            throw new InvalidRequestException("INVALID_ID");
         }
         BetSlip betSlip = service.getBetSlip(id);
-        return new BetSlipResponse(betSlip, "Retrived Successfully");
+        return new BetSlipResponse(betSlip.getId(), "BETSLIP_FOUND");
     }
 
     @GetMapping("/slip/account/{accountId}")
     public List<BetSlip> allBetSlips(@PathVariable("accountId") Long accountId) {
         if (accountId == null) {
-            throw new InvalidRequestException("INVALID_REQUEST! accountId required");
+            throw new InvalidRequestException("INVALID_ID");
         }
         return service.allBetSlips(accountId);
     }
@@ -77,7 +88,7 @@ public class BetController {
     @PostMapping("/slip/by/status")
     public List<BetSlip> allBetSlips(@RequestBody BetSlipByStatusRequest request) {
         if (request == null || request.getStatus() == null) {
-            throw new InvalidRequestException("INVALID_REQUEST! result required");
+            throw new InvalidRequestException("INVALID_REQUEST");
         }
         return service.getBetSlipsByStatus(request.getStatus());
     }
@@ -85,7 +96,7 @@ public class BetController {
     @PostMapping("/settle-single-bet")
     public OperationResponse settleSingleBet(@RequestBody SettleSingleBetRequest request) {
         if (request == null || request.getResult() == null) {
-            throw new InvalidRequestException("INVALID_REQUEST! result required");
+            throw new InvalidRequestException("INVALID_REQUEST");
         }
         return service.settleSingleBet(request.getBetId(), request.getResult());
     }
