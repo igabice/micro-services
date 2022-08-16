@@ -19,17 +19,17 @@
    
   ### Docker Compose
   a docker-compose file is located at the root directory. 
-  ## To start all services run
-   - docker-compose up
-   - wallet service can be accessed on: http://localhost:8091
-   - bet service can be accessed on: http://localhost:8090
-  # Actuator: check if service is running
-   - wallet service: http://localhost:8091/actuator
-   - bet service: http://localhost:8090/actuator
-  # Swagger: API documentation
-   - wallet service: http://localhost:8091/swagger-ui/index.html
-   - bet service: http://localhost:8090/swagger-ui/index.html
-  ## To stop all services run
-   - docker-compose down
+    ### To start all services run
+    - docker-compose up
+    - wallet service can be accessed on: http://localhost:8091
+    - bet service can be accessed on: http://localhost:8090
+    ### Actuator: check if service is running
+    - wallet service: http://localhost:8091/actuator
+    - bet service: http://localhost:8090/actuator
+    ### Swagger: API documentation
+    - wallet service: http://localhost:8091/swagger-ui/index.html
+    - bet service: http://localhost:8090/swagger-ui/index.html
+    ### To stop all services run
+    - docker-compose down
      ## To view logs of service(s)
    - docker-compose logs (service_name)
